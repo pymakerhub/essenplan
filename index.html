@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#0b0c10" />
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Essensplan – Einfach</title>
+    <style>
+      :root {
+        --bg: #0b0c10;
+        --card: #151823;
+        --text: #eaf0ff;
+        --muted: #a7b0c6;
+        --accent: #6ee7ff;
+        --line: #242a3a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial;
+        background: linear-gradient(160deg, #0b0c10, #0f1220);
+        color: var(--text);
+      }
+      header {
+        padding: 20px 16px 10px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 6px;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+      p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 12px 16px 40px;
+        display: grid;
+        gap: 14px;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 980px) {
+        main {
+          grid-template-columns: 1.05fr 0.95fr;
+        }
+      }
+
+      .card {
+        background: rgba(21, 24, 35, 0.92);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 16px;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .pill {
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .pill strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .grid {
+        display: grid;
+        gap: 10px;
+      }
+      .meal {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+        background: rgba(10, 12, 18, 0.35);
+      }
+      .meal h3 {
+        margin: 0 0 6px;
+        font-size: 14px;
+      }
+      .meal .time {
+        color: var(--accent);
+        font-weight: 700;
+        margin-right: 8px;
+      }
+      .meal ul {
+        margin: 8px 0 0 18px;
+        color: var(--muted);
+      }
+      .meal li {
+        margin: 3px 0;
+      }
+
+      label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin: 8px 0 6px;
+      }
+      select,
+      input[type='text'] {
+        width: 100%;
+        padding: 10px 10px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: rgba(8, 10, 14, 0.6);
+        color: var(--text);
+        outline: none;
+      }
+      select:focus,
+      input:focus {
+        border-color: rgba(110, 231, 255, 0.55);
+      }
+      button {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(110, 231, 255, 0.35);
+        background: rgba(110, 231, 255, 0.12);
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button:hover {
+        background: rgba(110, 231, 255, 0.18);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .small {
+        font-size: 12px;
+      }
+      .sep {
+        height: 1px;
+        background: var(--line);
+        margin: 12px 0;
+      }
+      .recipeBox {
+        border: 1px dashed rgba(110, 231, 255, 0.35);
+        padding: 12px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.12);
+      }
+      .recipeBox h4 {
+        margin: 0 0 8px;
+        font-size: 14px;
+      }
+      .recipeBox ol {
+        margin: 8px 0 0 18px;
+        color: var(--muted);
+      }
+      .kpi {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .kpi .pill {
+        background: rgba(0, 0, 0, 0.1);
+      }
+      .footerNote {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.35;
+      }
+      /* Improve readability for recipes */
+      .recipeBox {
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .recipeBox {
+        font-size: 16px;
+      }
+
+      .recipeBox ul,
+      .recipeBox ol {
+        font-size: 15px;
+      }
+
+      .recipeBox .small {
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Essensplan (einfach) – für deinen Freund</h1>
+      <p>Fixer Tagesrhythmus + Portionen + „Baukasten“ für schnelle Rezept-Ideen. Keine Registrierung, läuft lokal im Browser.</p>
+    </header>
+
+    <main>
+      <!-- LEFT: Tagesplan -->
+      <section class="card" aria-label="Tagesplan">
+        <div class="row" style="justify-content: space-between">
+          <h2 style="margin: 0">🕒 Tagesplan</h2>
+          <span id="nowPill" class="pill">Jetzt: --:--</span>
+        </div>
+
+        <div class="kpi" style="margin-top: 10px">
+          <span class="pill"><strong>Frühstück</strong> 07:00</span>
+          <span class="pill"><strong>Snack</strong> 10:00</span>
+          <span class="pill"><strong>Mittag</strong> 13:00</span>
+          <span class="pill"><strong>Snack</strong> 16:00</span>
+          <span class="pill"><strong>Abend</strong> 18–19</span>
+        </div>
+
+        <div class="grid" style="margin-top: 12px">
+          <div class="meal" id="meal-0700">
+            <h3><span class="time">07:00</span> Frühstück</h3>
+            <ul>
+              <li>1 Portion <strong>Kohlenhydrate</strong></li>
+              <li>1 Portion <strong>Fett</strong></li>
+              <li>1 Portion <strong>Protein</strong></li>
+              <li>1 Portion <strong>Obst</strong></li>
+              <li><em>Optional:</em> 1 Portion <strong>Gemüse</strong></li>
+            </ul>
+          </div>
+
+          <div class="meal" id="meal-1000">
+            <h3><span class="time">10:00</span> Snack</h3>
+            <ul>
+              <li><strong>Max. ~200 kcal</strong></li>
+              <li>Fokus: <strong>Protein</strong> (z. B. Skyr, Quark, Shake)</li>
+            </ul>
+          </div>
+
+          <div class="meal" id="meal-1300">
+            <h3><span class="time">13:00</span> Mittagessen</h3>
+            <ul>
+              <li>1 Portion <strong>Kohlenhydrate</strong></li>
+              <li>1 Portion <strong>Gemüse</strong></li>
+              <li>1 Portion <strong>Fett</strong></li>
+              <li>1 Portion <strong>Protein</strong></li>
+            </ul>
+          </div>
+
+          <div class="meal" id="meal-1600">
+            <h3><span class="time">16:00</span> Snack</h3>
+            <ul>
+              <li><strong>Max. ~200 kcal</strong></li>
+              <li>Fokus: <strong>Protein</strong></li>
+            </ul>
+          </div>
+
+          <div class="meal" id="meal-1830">
+            <h3><span class="time">18:00–19:00</span> Abendessen</h3>
+            <ul>
+              <li>1 Portion <strong>Protein</strong></li>
+              <li>1 Portion <strong>Fett</strong></li>
+              <li>1 Portion <strong>Gemüse</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <h2 style="margin: 0 0 8px">📏 Portionen (Beispiele)</h2>
+        <p class="muted small">
+          Diese Beispiele sind bewusst einfach gehalten. Ihr könnt die Liste unten jederzeit anpassen (im Code oder später mit Speichern/Favoriten).
+        </p>
+
+        <div class="grid" style="margin-top: 10px">
+          <div class="meal">
+            <h3>Protein (1 Portion)</h3>
+            <ul>
+              <li>Hähnchen/Pute/Fisch: ca. <strong>120–180 g</strong> (je nach Plan)</li>
+              <li>Magerquark/Skyr: <strong>200–250 g</strong></li>
+              <li>Eier: <strong>2–3 Stück</strong></li>
+              <li>Tofu: <strong>150–200 g</strong></li>
+            </ul>
+          </div>
+
+          <div class="meal">
+            <h3>Kohlenhydrate (1 Portion)</h3>
+            <ul>
+              <li>Kartoffeln: <strong>200–300 g</strong> gekocht</li>
+              <li>Reis/Nudeln: <strong>60–80 g</strong> roh (oder ~180–240 g gekocht)</li>
+              <li>Haferflocken: <strong>40–60 g</strong></li>
+              <li>Brot: <strong>1–2 Scheiben</strong> (je nach Größe)</li>
+            </ul>
+          </div>
+
+          <div class="meal">
+            <h3>Fett (1 Portion)</h3>
+            <ul>
+              <li>Olivenöl: <strong>1 EL</strong></li>
+              <li>Nüsse: <strong>20–30 g</strong></li>
+              <li>Avocado: <strong>½</strong></li>
+              <li>Käse: <strong>20–30 g</strong></li>
+            </ul>
+          </div>
+
+          <div class="meal">
+            <h3>Obst & Gemüse</h3>
+            <ul>
+              <li>Gemüse: <strong>1–2 Handvoll</strong> (Brokkoli, Paprika, Salat, …)</li>
+              <li>Obst: <strong>1 Stück</strong> (Apfel/Banane) oder <strong>1 Schale</strong> Beeren</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- <label for="mealSel">Mahlzeit</label>
+      <select id="mealSel">
+        <option value="breakfast">Frühstück (07:00)</option>
+        <option value="snack">Snack (10:00 / 16:00)</option>
+        <option value="lunch">Mittagessen (13:00)</option>
+        <option value="dinner">Abendessen (18–19)</option>
+      </select>
+
+      <div id="fruitBlock">
+        <label for="fruitSel">Obst (nur Frühstück)</label>
+        <select id="fruitSel"></select>
+      </div> -->
+
+      <!-- RIGHT: Baukasten + Rezept -->
+      <section class="card" aria-label="Rezept-Baukasten">
+        <h2>🍳 Rezept-Baukasten (simpel)</h2>
+        <p class="muted">Wähle Zutaten aus. Die App schlägt dir eine einfache Zubereitung vor.</p>
+
+        <label for="mealSel">Mahlzeit</label>
+        <select id="mealSel">
+          <option value="breakfast">Frühstück (07:00)</option>
+          <option value="snack">Snack (10:00 / 16:00)</option>
+          <option value="lunch">Mittagessen (13:00)</option>
+          <option value="dinner">Abendessen (18–19)</option>
+        </select>
+
+        <label for="personName">Name (optional)</label>
+        <input id="personName" type="text" placeholder="z. B. Max" />
+
+        <div class="sep"></div>
+
+        <div id="fruitBlock">
+          <label for="fruitSel">Obst (nur Frühstück)</label>
+          <select id="fruitSel"></select>
+        </div>
+
+        <div id="snackBlock" style="display: none">
+          <label for="snackSel">Snack-Idee (10:00 / 16:00)</label>
+          <select id="snackSel"></select>
+          <p class="muted small" style="margin-top: 6px">Ziel: <strong>max. ~100 kcal</strong> · einfach · plan-konform</p>
+        </div>
+
+        <div id="proteinField">
+          <label for="proteinSel">Protein</label>
+          <select id="proteinSel"></select>
+        </div>
+
+        <div id="vegField">
+          <label for="vegSel">Gemüse</label>
+          <select id="vegSel"></select>
+        </div>
+
+        <div id="carbField">
+          <label for="carbSel">Kohlenhydrate</label>
+          <select id="carbSel"></select>
+        </div>
+
+        <div id="fatField">
+          <label for="fatSel">Fett</label>
+          <select id="fatSel"></select>
+        </div>
+
+        <div class="row" style="margin-top: 12px">
+          <button id="suggestBtn">Rezept vorschlagen</button>
+          <button id="randomBtn" title="Zufällige Kombi">Zufall</button>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="recipeBox" id="recipeBox">
+          <h4>✅ Vorschlag</h4>
+          <p class="muted small" id="recipeIntro">Wähle oben Zutaten und klicke auf „Rezept vorschlagen“.</p>
+          <div id="recipeContent"></div>
+        </div>
+
+        <p class="footerNote">
+          Tipp: Wenn ihr später speichern wollt (Favoriten, Einkaufsliste, „Was habe ich gegessen?“), kann ich das in 10–20 Zeilen JavaScript per
+          <code>localStorage</code> ergänzen.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      const DATA = {
+        protein: [
+          { name: 'Hähnchenbrust', method: 'Pfanne / Ofen', portion: '1 Handfläche (≈ 150 g)' },
+          { name: 'Putenbrust', method: 'Pfanne / Ofen', portion: '1 Handfläche (≈ 150 g)' },
+          { name: 'Rind (mager)', method: 'Pfanne', portion: '1 Handfläche (≈ 150 g)' },
+          { name: 'Schweinefilet', method: 'Pfanne', portion: '1 Handfläche (≈ 150 g)' },
+          { name: 'Lachs', method: 'Pfanne / Ofen', portion: '1 Handfläche (≈ 150 g)' },
+          {
+            name: 'Thunfisch (Dose, im eigenen Saft)',
+            method: 'Kalt / Salat',
+            portion: '½ Dose abgetropft (≈ 80–100 g)',
+          },
+          { name: 'Kabeljau / Weißfisch', method: 'Pfanne / Ofen', portion: '1 Handfläche (≈ 170 g)' },
+          { name: 'Eier', method: 'Rührei / gekocht', portion: '2 Stück' },
+          { name: 'Eiklar', method: 'Pfanne', portion: '200 ml (≈ 1 kleines Glas)' },
+          { name: 'Tofu', method: 'Pfanne', portion: '½ Block (≈ 150–200 g)' },
+          { name: 'Tempeh', method: 'Pfanne', portion: '½ Packung (≈ 100–150 g)' },
+          { name: 'Magerquark', method: 'Kalt', portion: '1 Becher (≈ 200–250 g)' },
+          { name: 'Skyr', method: 'Kalt', portion: '1 Becher (≈ 200–250 g)' },
+          { name: 'Hüttenkäse', method: 'Kalt', portion: '1 Becher (≈ 200–250 g)' },
+        ],
+
+        veg: [
+          { name: 'Brokkoli', method: 'Dämpfen / Pfanne', portion: '1 Cup gekocht oder 2 Cups roh' },
+          { name: 'Zucchini', method: 'Pfanne', portion: '1 Cup (oder 1 mittelgroße)' },
+          { name: 'Paprika', method: 'Pfanne / Roh', portion: '1 große oder 2 kleine' },
+          { name: 'Spinat', method: 'Pfanne / Roh', portion: '2 Cups roh oder 1 Cup gekocht' },
+          { name: 'Blumenkohl', method: 'Dämpfen / Ofen', portion: '1 Cup (oder 2 große Handvoll)' },
+          { name: 'Karotten', method: 'Roh / gekocht', portion: '2 mittelgroße' },
+          { name: 'Grüne Bohnen', method: 'Kochen', portion: '1 Cup gekocht' },
+          { name: 'Salatmix', method: 'Kalt', portion: '2 Cups' },
+          { name: 'Gurke', method: 'Roh', portion: '½ große Gurke (oder 1 kleine)' },
+          { name: 'Tomaten', method: 'Roh / Pfanne', portion: '2 mittelgroße (oder 1 Cup geschnitten)' },
+        ],
+
+        carbs: [
+          { name: 'Kartoffeln', method: 'Kochen / Ofen', portion: '2–3 mittelgroße (≈ 1–2 Fäuste)' },
+          { name: 'Süßkartoffeln', method: 'Ofen / Pfanne', portion: '1 mittelgroße (≈ 1 Faust)' },
+          { name: 'Reis (weiß oder braun)', method: 'Kochen', portion: '1 Cup gekocht' },
+          { name: 'Quinoa', method: 'Kochen', portion: '1 Cup gekocht' },
+          { name: 'Haferflocken', method: 'Warm / Kalt', portion: '½ Cup trocken (≈ 40–60 g)' },
+          { name: 'Vollkornnudeln', method: 'Kochen', portion: '1 Cup gekocht' },
+          { name: 'Vollkornbrot', method: 'Kalt / Toast', portion: '1 Scheibe (groß) oder 2 kleine' },
+          { name: 'Amaranth', method: 'Kochen', portion: '1 Cup gekocht' },
+          { name: 'Linsen', method: 'Kochen', portion: '1 Cup gekocht' },
+          { name: 'Bohnen (schwarz, weiß, Kidney)', method: 'Kochen', portion: '1 Cup gekocht (abgetropft)' },
+        ],
+
+        fat: [
+          { name: 'Olivenöl', method: 'Dressing / Pfanne', portion: '1 TL' },
+          { name: 'Kokosöl', method: 'Pfanne', portion: '1 TL' },
+          { name: 'Avocado', method: 'Kalt', portion: '¼ Avocado' },
+          { name: 'Mandeln', method: 'Topping', portion: '1 TL (gehackt) ODER 6–8 Stück' },
+          { name: 'Walnüsse', method: 'Topping', portion: '1 TL (gehackt) ODER 2–3 halbe' },
+          { name: 'Cashews', method: 'Topping', portion: '1 TL (gehackt) ODER 6–8 Stück' },
+          { name: 'Erdnussmus', method: 'Topping', portion: '1 TL' },
+          { name: 'Mandelmus', method: 'Topping', portion: '1 TL' },
+          { name: 'Käse (z. B. Mozzarella, Feta)', method: 'Kalt / Topping', portion: '1 TL (zerbröselt) ODER 1 kleines Stück (≈ 15 g)' },
+          { name: 'Samen (Chia, Leinsamen)', method: 'Topping', portion: '1 TL' },
+        ],
+
+        fruit: [
+          { name: 'Apfel', portion: '1 klein–mittel' },
+          { name: 'Birne', portion: '1 klein–mittel' },
+          { name: 'Orange', portion: '1 klein–mittel' },
+          { name: 'Beeren', portion: '1 Cup' },
+          { name: 'Banane', portion: '½ Banane' },
+        ],
+
+        snacks: [
+          { name: 'Skyr', portion: '½ Becher (≈ 120 g)', kcal: 80, note: 'Natur, ohne Extras' },
+          { name: 'Magerquark', portion: '½ Becher (≈ 120 g)', kcal: 85, note: 'Optional Zimt oder Süßstoff' },
+          { name: 'Hüttenkäse', portion: '½ Becher (≈ 120 g)', kcal: 90, note: 'Sehr gut sättigend' },
+          { name: 'Proteinshake', portion: '½ Portion mit Wasser', kcal: 90, note: 'Kein Öl, keine Milch' },
+          { name: 'Ei (gekocht)', portion: '1 Stück', kcal: 75, note: 'Super für unterwegs' },
+          { name: 'Nüsse', portion: '6–8 Mandeln ODER 1 TL Nussmus', kcal: 100, note: 'Grenzwertig – nicht öfter als 1× täglich' },
+        ],
+      };
+
+      function fillSelect(selectEl, items) {
+        selectEl.innerHTML = '';
+        items.forEach((it, idx) => {
+          const opt = document.createElement('option');
+          opt.value = idx;
+          opt.textContent = it.name;
+          selectEl.appendChild(opt);
+        });
+      }
+
+      const proteinSel = document.getElementById('proteinSel');
+      const vegSel = document.getElementById('vegSel');
+      const carbSel = document.getElementById('carbSel');
+      const fatSel = document.getElementById('fatSel');
+      const mealSel = document.getElementById('mealSel');
+      const fruitSel = document.getElementById('fruitSel');
+      const fruitBlock = document.getElementById('fruitBlock');
+
+      const proteinField = document.getElementById('proteinField');
+      const vegField = document.getElementById('vegField');
+      const carbField = document.getElementById('carbField');
+      const fatField = document.getElementById('fatField');
+
+      const snackBlock = document.getElementById('snackBlock');
+      const snackSel = document.getElementById('snackSel');
+
+      // Auswahl-Merker
+      let lastCarbValue = null;
+
+      fillSelect(proteinSel, DATA.protein);
+      fillSelect(vegSel, DATA.veg);
+      fillSelect(carbSel, DATA.carbs);
+      fillSelect(fatSel, DATA.fat);
+      fillSelect(fruitSel, DATA.fruit);
+      fillSelect(snackSel, DATA.snacks);
+
+      function applyMealRules() {
+        const meal = mealSel.value;
+
+        const showFruit = meal === 'breakfast';
+        const showCarbs = meal === 'breakfast' || meal === 'lunch';
+        const showVeg = meal === 'breakfast' || meal === 'lunch' || meal === 'dinner';
+        const showFat = meal === 'breakfast' || meal === 'lunch' || meal === 'dinner';
+        const showProtein = meal !== 'snack'; // bei Snack nutzen wir snackBlock
+        const showSnack = meal === 'snack';
+
+        // Carbs "merken", wenn sie gleich verschwinden
+        if (!showCarbs && carbSel && carbSel.value !== undefined) {
+          lastCarbValue = carbSel.value;
+        }
+        // Wenn Carbs wieder sichtbar werden, vorherige Auswahl zurückholen
+        if (showCarbs && lastCarbValue !== null && carbSel) {
+          carbSel.value = lastCarbValue;
+        }
+
+        fruitBlock.style.display = showFruit ? 'block' : 'none';
+        snackBlock.style.display = showSnack ? 'block' : 'none';
+
+        proteinField.style.display = showProtein ? 'block' : 'none';
+        vegField.style.display = showVeg ? 'block' : 'none';
+        carbField.style.display = showCarbs ? 'block' : 'none';
+        fatField.style.display = showFat ? 'block' : 'none';
+      }
+
+      mealSel.addEventListener('change', () => {
+        applyMealRules();
+        if (mealSel.value === 'snack') {
+          // Bevorzuge Protein-Snacks
+          const proteinSnacks = DATA.snacks.filter((s) => s.kcal <= 90);
+          const pool = proteinSnacks.length ? proteinSnacks : DATA.snacks;
+          snackSel.value = DATA.snacks.indexOf(pool[Math.floor(Math.random() * pool.length)]);
+        }
+        renderRecipe();
+      });
+
+      applyMealRules();
+
+      function recipeSteps(protein, veg, carb, fat) {
+        // super-simple rules
+        const steps = [];
+
+        // Protein
+        if (protein.method.includes('Pfanne')) {
+          steps.push(`${protein.name} würzen (Salz/Pfeffer/Paprika). In der Pfanne anbraten.`);
+        } else if (protein.method.includes('Ofen')) {
+          steps.push(`${protein.name} würzen. Im Ofen garen (z. B. 180–200°C) bis durch.`);
+        } else if (protein.method.includes('gekocht')) {
+          steps.push(`${protein.name} kochen (oder als Rührei zubereiten).`);
+        } else {
+          steps.push(`${protein.name} kalt verwenden (z. B. als Basis/Beilage).`);
+        }
+
+        // Gemüse
+        if (veg.method.includes('Dämpfen')) {
+          steps.push(`${veg.name} dämpfen oder kurz kochen, bis es weich ist.`);
+        } else if (veg.method.includes('Pfanne')) {
+          steps.push(`${veg.name} in der Pfanne kurz anbraten (gern mit etwas Wasser/Deckel, damit es weich wird).`);
+        } else if (veg.method.includes('Roh')) {
+          steps.push(`${veg.name} waschen/schneiden und roh dazu essen.`);
+        } else {
+          steps.push(`${veg.name} nach Wahl zubereiten (roh oder gekocht).`);
+        }
+
+        // Carbs
+        if (carb.name === 'Kartoffeln') {
+          steps.push(`Kartoffeln schälen (optional) und kochen. Alternativ als Ofenkartoffeln backen.`);
+        } else if (carb.method.includes('Kochen')) {
+          steps.push(`${carb.name} nach Packungsangabe kochen.`);
+        } else {
+          steps.push(`${carb.name} als Beilage vorbereiten (z. B. Brot/Haferflocken).`);
+        }
+
+        // Fat
+        if (fat.name === 'Olivenöl') {
+          steps.push(`Am Ende 1 EL Olivenöl über Gemüse/Salat geben oder als Dressing nutzen.`);
+        } else if (fat.name === 'Avocado') {
+          steps.push(`Avocado dazu (½ Stück), z. B. in Scheiben oder als Dip.`);
+        } else if (fat.name === 'Nüsse') {
+          steps.push(`Nüsse abwiegen (20–30 g) und als Topping nutzen.`);
+        } else if (fat.name === 'Erdnussmus') {
+          steps.push(`1 EL Erdnussmus als Topping (z. B. in Quark oder auf Brot).`);
+        } else {
+          steps.push(`${fat.name} in kleiner Menge als Topping/Beilage.`);
+        }
+
+        steps.push(`Alles zusammen auf einen Teller – fertig. ✅`);
+        return steps;
+      }
+
+      function renderRecipe() {
+        const name = document.getElementById('personName').value.trim();
+        const meal = mealSel.value;
+
+        const p = DATA.protein[Number(proteinSel.value)];
+        const v = DATA.veg[Number(vegSel.value)];
+        const c = DATA.carbs[Number(carbSel.value)];
+        const f = DATA.fat[Number(fatSel.value)];
+        const fr = DATA.fruit[Number(fruitSel.value)];
+
+        const intro = document.getElementById('recipeIntro');
+        const content = document.getElementById('recipeContent');
+        const titleName = name ? `für ${name}` : 'für dich';
+
+        if (meal === 'snack') {
+          const s = DATA.snacks[Number(snackSel.value)];
+
+          intro.textContent = `Snack ${titleName}: ${s.name}`;
+
+          const warning = s.kcal > 95 ? `<p style="color:#ffb3b3;"><strong>⚠ Hinweis:</strong> Dieser Snack ist an der 100-kcal-Grenze.</p>` : '';
+
+          content.innerHTML = `
+                <p class="small muted"><strong>Portion:</strong> ${s.portion}</p>
+                <p class="small muted"><strong>Kalorien:</strong> ca. ${s.kcal} kcal</p>
+                ${warning}
+                <p class="small muted"><strong>Info:</strong> ${s.note}</p>
+                <ol>
+                <li>${s.name} vorbereiten.</li>
+                <li>Langsam essen → Sättigung abwarten.</li>
+                <li>Wasser oder Tee dazu. ✅</li>
+                </ol>
+            `;
+          return;
+        }
+
+        // Frühstück: Protein + Carbs + Fat + Fruit (+ optional Gemüse)
+        if (meal === 'breakfast') {
+          intro.textContent = `Frühstück ${titleName}: ${p.name} + ${c.name} + ${f.name} + ${fr.name}`;
+          content.innerHTML = `
+      <p class="small muted"><strong>Zutaten & Portionen:</strong></p>
+      <ul class="small muted">
+        <li><strong>Protein:</strong> ${p.name} — ${p.portion}</li>
+        <li><strong>Carbs:</strong> ${c.name} — ${c.portion}</li>
+        <li><strong>Fett:</strong> ${f.name} — ${f.portion}</li>
+        <li><strong>Obst:</strong> ${fr.name} — ${fr.portion}</li>
+        <li><em>Optional Gemüse:</em> ${v.name} — ${v.portion}</li>
+      </ul>
+      <ol>
+        <li>${p.name} zubereiten (${p.method}).</li>
+        <li>${c.name} vorbereiten (${c.method}).</li>
+        <li>${f.name} als Portion dazu (nicht “nach Gefühl” drüberkippen).</li>
+        <li>Obstportion dazu: ${fr.name} (${fr.portion}). ✅</li>
+      </ol>
+    `;
+          return;
+        }
+
+        // Mittag: Protein + Carbs + Fat + Veg
+        if (meal === 'lunch') {
+          intro.textContent = `Mittagessen ${titleName}: ${p.name} + ${v.name} + ${c.name} + ${f.name}`;
+          const steps = recipeSteps(p, v, c, f);
+          content.innerHTML = `
+      <p class="small muted"><strong>Portionen:</strong></p>
+      <ul class="small muted">
+        <li><strong>Protein:</strong> ${p.name} — ${p.portion}</li>
+        <li><strong>Gemüse:</strong> ${v.name} — ${v.portion}</li>
+        <li><strong>Carbs:</strong> ${c.name} — ${c.portion}</li>
+        <li><strong>Fett:</strong> ${f.name} — ${f.portion}</li>
+      </ul>
+      <ol>${steps.map((s) => `<li>${s}</li>`).join('')}</ol>
+    `;
+          return;
+        }
+
+        // Abend: Protein + Fat + Veg (keine Carbs)
+        if (meal === 'dinner') {
+          intro.textContent = `Abendessen ${titleName}: ${p.name} + ${v.name} + ${f.name}`;
+          content.innerHTML = `
+      <p class="small muted"><strong>Portionen:</strong></p>
+      <ul class="small muted">
+        <li><strong>Protein:</strong> ${p.name} — ${p.portion}</li>
+        <li><strong>Gemüse:</strong> ${v.name} — ${v.portion}</li>
+        <li><strong>Fett:</strong> ${f.name} — ${f.portion}</li>
+      </ul>
+      <ol>
+        <li>${p.name} zubereiten (${p.method}).</li>
+        <li>${v.name} zubereiten (${v.method}).</li>
+        <li>${f.name} als Portion dazu (${f.portion}). ✅</li>
+      </ol>
+    `;
+          return;
+        }
+      }
+
+      document.getElementById('suggestBtn').addEventListener('click', renderRecipe);
+
+      document.getElementById('randomBtn').addEventListener('click', () => {
+        proteinSel.value = Math.floor(Math.random() * DATA.protein.length);
+        vegSel.value = Math.floor(Math.random() * DATA.veg.length);
+        carbSel.value = Math.floor(Math.random() * DATA.carbs.length);
+        fatSel.value = Math.floor(Math.random() * DATA.fat.length);
+        renderRecipe();
+      });
+
+      // "Jetzt" + Highlight der nächsten Mahlzeit
+      const nowPill = document.getElementById('nowPill');
+
+      const schedule = [
+        { id: 'meal-0700', label: '07:00', hour: 7, min: 0 },
+        { id: 'meal-1000', label: '10:00', hour: 10, min: 0 },
+        { id: 'meal-1300', label: '13:00', hour: 13, min: 0 },
+        { id: 'meal-1600', label: '16:00', hour: 16, min: 0 },
+        { id: 'meal-1830', label: '18:30', hour: 18, min: 30 },
+      ];
+
+      function pad(n) {
+        return String(n).padStart(2, '0');
+      }
+
+      function updateNow() {
+        const d = new Date();
+        const hh = pad(d.getHours());
+        const mm = pad(d.getMinutes());
+        nowPill.textContent = `Jetzt: ${hh}:${mm}`;
+
+        // reset styles
+        schedule.forEach((s) => {
+          const el = document.getElementById(s.id);
+          el.style.borderColor = 'var(--line)';
+          el.style.boxShadow = 'none';
+        });
+
+        // find next meal
+        const nowMinutes = d.getHours() * 60 + d.getMinutes();
+        let next = schedule.find((s) => s.hour * 60 + s.min >= nowMinutes);
+        if (!next) next = schedule[0]; // next day
+
+        const nextEl = document.getElementById(next.id);
+        nextEl.style.borderColor = 'rgba(110,231,255,.55)';
+        nextEl.style.boxShadow = '0 0 0 3px rgba(110,231,255,.08)';
+      }
+
+      updateNow();
+      setInterval(updateNow, 30000);
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js');
+      }
+    </script>
+  </body>
+</html>
