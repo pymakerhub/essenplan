@@ -9,11 +9,11 @@
     <title>Essensplan – Einfach</title>
     <style>
       :root {
-        --bg: #0b0c10;
-        --card: #151823;
-        --text: #eaf0ff;
+        --bg: #c90076;
+        --card: #fd1a9f;
+        --text: #ffbdeb;
         --muted: #a7b0c6;
-        --accent: #6ee7ff;
+        --accent: #fa49c4;
         --line: #242a3a;
       }
       * {
@@ -27,7 +27,7 @@
           Segoe UI,
           Roboto,
           Arial;
-        background: linear-gradient(160deg, #0b0c10, #0f1220);
+        background: linear-gradient(160deg, #011f4b, #03396c);
         color: var(--text);
       }
       header {
@@ -60,7 +60,7 @@
       }
 
       .card {
-        background: rgba(21, 24, 35, 0.92);
+        background: rgba(0, 91, 150, 0.92);
         border: 1px solid var(--line);
         border-radius: 16px;
         padding: 14px;
@@ -207,8 +207,8 @@
   </head>
   <body>
     <header>
-      <h1>Essensplan (einfach) – für deinen Freund</h1>
-      <p>Fixer Tagesrhythmus + Portionen + „Baukasten“ für schnelle Rezept-Ideen. Keine Registrierung, läuft lokal im Browser.</p>
+      <h1>Essensplan (einfach)</h1>
+      <p>Fixer Tagesrhythmus + Portionen + „Baukasten“ für schnelle Rezept-Ideen.</p>
     </header>
 
     <main>
@@ -242,7 +242,7 @@
           <div class="meal" id="meal-1000">
             <h3><span class="time">10:00</span> Snack</h3>
             <ul>
-              <li><strong>Max. ~200 kcal</strong></li>
+              <li><strong>Max. ~150 kcal</strong></li>
               <li>Fokus: <strong>Protein</strong> (z. B. Skyr, Quark, Shake)</li>
             </ul>
           </div>
@@ -260,7 +260,7 @@
           <div class="meal" id="meal-1600">
             <h3><span class="time">16:00</span> Snack</h3>
             <ul>
-              <li><strong>Max. ~200 kcal</strong></li>
+              <li><strong>Max. ~150 kcal</strong></li>
               <li>Fokus: <strong>Protein</strong></li>
             </ul>
           </div>
@@ -278,16 +278,16 @@
         <div class="sep"></div>
 
         <h2 style="margin: 0 0 8px">📏 Portionen (Beispiele)</h2>
-        <p class="muted small">
+        <!-- <p class="muted small">
           Diese Beispiele sind bewusst einfach gehalten. Ihr könnt die Liste unten jederzeit anpassen (im Code oder später mit Speichern/Favoriten).
-        </p>
+        </p> -->
 
         <div class="grid" style="margin-top: 10px">
           <div class="meal">
             <h3>Protein (1 Portion)</h3>
             <ul>
-              <li>Hähnchen/Pute/Fisch: ca. <strong>120–180 g</strong> (je nach Plan)</li>
-              <li>Magerquark/Skyr: <strong>200–250 g</strong></li>
+              <li>Hähnchen/Pute/Fisch: ca. <strong>100–150 g</strong> (je nach Plan)</li>
+              <li>Magerquark/Skyr: <strong>150–200 g</strong></li>
               <li>Eier: <strong>2–3 Stück</strong></li>
               <li>Tofu: <strong>150–200 g</strong></li>
             </ul>
@@ -296,9 +296,9 @@
           <div class="meal">
             <h3>Kohlenhydrate (1 Portion)</h3>
             <ul>
-              <li>Kartoffeln: <strong>200–300 g</strong> gekocht</li>
-              <li>Reis/Nudeln: <strong>60–80 g</strong> roh (oder ~180–240 g gekocht)</li>
-              <li>Haferflocken: <strong>40–60 g</strong></li>
+              <li>Kartoffeln: <strong>100–150 g</strong> gekocht</li>
+              <li>Reis/Nudeln: <strong>30–40 g</strong> roh (oder ~90–120 g gekocht)</li>
+              <li>Haferflocken: <strong>20–30 g</strong></li>
               <li>Brot: <strong>1–2 Scheiben</strong> (je nach Größe)</li>
             </ul>
           </div>
@@ -306,10 +306,10 @@
           <div class="meal">
             <h3>Fett (1 Portion)</h3>
             <ul>
-              <li>Olivenöl: <strong>1 EL</strong></li>
-              <li>Nüsse: <strong>20–30 g</strong></li>
-              <li>Avocado: <strong>½</strong></li>
-              <li>Käse: <strong>20–30 g</strong></li>
+              <li>Olivenöl: <strong>1 TL</strong></li>
+              <li>Nüsse: <strong>10–15 g</strong></li>
+              <li>Avocado: <strong>¼</strong></li>
+              <li>Käse: <strong>10–15 g</strong></li>
             </ul>
           </div>
 
@@ -317,7 +317,7 @@
             <h3>Obst & Gemüse</h3>
             <ul>
               <li>Gemüse: <strong>1–2 Handvoll</strong> (Brokkoli, Paprika, Salat, …)</li>
-              <li>Obst: <strong>1 Stück</strong> (Apfel/Banane) oder <strong>1 Schale</strong> Beeren</li>
+              <li>Obst: <strong>1 Stück</strong> (Apfel/Birne) oder <strong>1 Schale</strong> Beeren</li>
             </ul>
           </div>
         </div>
@@ -362,7 +362,7 @@
         <div id="snackBlock" style="display: none">
           <label for="snackSel">Snack-Idee (10:00 / 16:00)</label>
           <select id="snackSel"></select>
-          <p class="muted small" style="margin-top: 6px">Ziel: <strong>max. ~100 kcal</strong> · einfach · plan-konform</p>
+          <p class="muted small" style="margin-top: 6px">Ziel: <strong>max. ~150 kcal</strong> · einfach · plan-konform</p>
         </div>
 
         <div id="proteinField">
@@ -398,10 +398,10 @@
           <div id="recipeContent"></div>
         </div>
 
-        <p class="footerNote">
+        <!-- <p class="footerNote">
           Tipp: Wenn ihr später speichern wollt (Favoriten, Einkaufsliste, „Was habe ich gegessen?“), kann ich das in 10–20 Zeilen JavaScript per
           <code>localStorage</code> ergänzen.
-        </p>
+        </p> -->
       </section>
     </main>
 
@@ -599,13 +599,13 @@
 
         // Fat
         if (fat.name === 'Olivenöl') {
-          steps.push(`Am Ende 1 EL Olivenöl über Gemüse/Salat geben oder als Dressing nutzen.`);
+          steps.push(`Am Ende 1 TL Olivenöl über Gemüse/Salat geben oder als Dressing nutzen.`);
         } else if (fat.name === 'Avocado') {
-          steps.push(`Avocado dazu (½ Stück), z. B. in Scheiben oder als Dip.`);
+          steps.push(`Avocado dazu (¼ Stück), z. B. in Scheiben oder als Dip.`);
         } else if (fat.name === 'Nüsse') {
-          steps.push(`Nüsse abwiegen (20–30 g) und als Topping nutzen.`);
+          steps.push(`Nüsse abwiegen (10–15 g) und als Topping nutzen.`);
         } else if (fat.name === 'Erdnussmus') {
-          steps.push(`1 EL Erdnussmus als Topping (z. B. in Quark oder auf Brot).`);
+          steps.push(`1 TL Erdnussmus als Topping (z. B. in Quark oder auf Brot).`);
         } else {
           steps.push(`${fat.name} in kleiner Menge als Topping/Beilage.`);
         }
