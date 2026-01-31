@@ -1,4 +1,4 @@
-const CACHE_NAME = 'essenplan-v1';
+const CACHE_NAME = 'essenplan-v2';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -8,3 +8,4 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
 });
+
